@@ -444,16 +444,15 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									 selectPublication().selectByVisibleText(record.get("publication"));
 							    	 waitFor(3).seconds();
 							    	 selectSection().selectByVisibleText(record.get("section"));
+							    	 waitFor(6).seconds();
+							    	 selectSubSection().selectByVisibleText(record.get(record.get("subsection"))); // subsection
 							    	 waitFor(4).seconds();
-							    	/* selectSubSection().selectByVisibleText(record.get(record.get("subsection"))); // subsection
-							    	 waitFor(4).seconds();*/
 							    	 selectZone().selectByVisibleText(record.get("zones"));
 							    	 waitFor(6).seconds();
 							    	 selectModule().selectByVisibleText(record.get("module"));
 							    	 waitFor(5).seconds();
 							    	 nextMonth().click();
 									 waitFor(3).seconds();
-							    	 
 								 }
 								 if (packageType.equalsIgnoreCase("MailPlus")) {
 									 
@@ -468,7 +467,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									 nextMonth().click();
 									 waitFor(3).seconds();
 								 }
-								 
 								 if (packageType.equalsIgnoreCase("Mail Display Inserts")) {
 									 
 									 title().selectByVisibleText(record.get("title"));
