@@ -1,40 +1,63 @@
 package happyPathTests.steps;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.pages.Pages;
+
+import java.util.ArrayList;
+
+import happyPathTests.pages.SalesforceGlueContactsPage;
 import net.thucydides.core.steps.ScenarioSteps;
-import java.util.List;
-import static org.fest.assertions.Assertions.assertThat;
+import happyPathTests.pages.LoginPage;
+import happyPathTests.pages.SalesforceGlueAccountPage;
+import happyPathTests.pages.SalesforceGlueHomePage;
 
-import happyPathTests.pages.DictionaryPage;
-
+/**
+ * @author Srinivasa.Kuncha
+ *
+ */
 public class EndUserSteps extends ScenarioSteps {
 
-    DictionaryPage dictionaryPage;
-
-    @Step
-    public void enters(String keyword) {
-        dictionaryPage.enter_keywords(keyword);
+    LoginPage loginPage;
+    SalesforceGlueHomePage homePage;
+    ArrayList<String> arraylist = new ArrayList<String>(); 
+    
+    public void is_this_home_page()  {
+    	loginPage.open();
+		getDriver().manage().window().maximize();
+	}
+    
+    public void supplyLoginCredientials(String username, String password){
+    	loginPage.supplyLogin_Credientials(username, password);
     }
 
-    @Step
-    public void starts_search() {
-        dictionaryPage.lookup_terms();
+    public void loginSuccessful() {
+    	
+    	loginPage.clickOnLogin();
+    	waitABit(3000);
+    }	
+    
+    public void accessNewAccountPage() {
+    	
+    	SalesforceGlueAccountPage accountPage = getPages().get(SalesforceGlueAccountPage.class);
+		homePage.AccountsTab();
+		waitABit(4000);
+		accountPage.newAccount();
     }
+    
+    public void searchForAnAccountUsingAccountName(String keyword) {
+    	waitABit(1000);
+    	SalesforceGlueAccountPage accountPage = getPages().get(SalesforceGlueAccountPage.class);
+    	accountPage.newAccountChild(keyword);
+    }
+    	
+    public void accessNewAccountsPageviaSearchResults() {
+    	SalesforceGlueAccountPage accountPage = getPages().get(SalesforceGlueAccountPage.class);
+		accountPage.newAccountButtonFromSearchResultsSection();
+    }
+    
+/**************************************************CSVFile**********************************************/
+    public void read_csv_input(String file) {
 
-    @Step
-    public void should_see_definition(String definition) {
-        assertThat(dictionaryPage.getDefinitions()).contains(definition);
-    }
-
-    @Step
-    public void is_the_home_page() {
-        dictionaryPage.open();
-    }
-
-    @Step
-    public void looks_for(String term) {
-        enters(term);
-        starts_search();
-    }
+    	SalesforceGlueAccountPage accountPage = getPages().get(SalesforceGlueAccountPage.class);
+    	accountPage.read_input(file);
+	}
+ 
 }

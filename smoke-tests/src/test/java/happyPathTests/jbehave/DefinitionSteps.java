@@ -1,30 +1,54 @@
 package happyPathTests.jbehave;
 
 import net.thucydides.core.annotations.Steps;
+
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import happyPathTests.steps.EndUserSteps;
 
+/**
+ * @author Srinivasa.Kuncha
+ *
+ */
 public class DefinitionSteps {
 
     @Steps
-    EndUserSteps endUser;
-
-    @Given("the user is on the Wikionary home page")
-    public void givenTheUserIsOnTheWikionaryHomePage() {
-        endUser.is_the_home_page();
+    EndUserSteps salesUser;
+    
+    @Given("Sales rep is on the Salesfoce home page")
+    public void userIsOnTheSalesforceHomePage() {
+        salesUser.is_this_home_page();
     }
 
-    @When("the user looks up the definition of the word '$word'")
-    public void whenTheUserLooksUpTheDefinitionOf(String word) {
-        endUser.looks_for(word);
+    @When("Sales rep login to glue as Mail user by supplying $UserName and $Password")
+    public void userSupplyLoginCredentials(String username, String password) {
+        salesUser.supplyLoginCredientials(username, password);
     }
 
-    @Then("they should see the definition '$definition'")
-    public void thenTheyShouldSeeADefinitionContainingTheWords(String definition) {
-        endUser.should_see_definition(definition);
+    @Then("Mail user should be able to login to glue successfully")
+    public void userShouldSeeSalesforceHomePage() {
+        salesUser.loginSuccessful();
     }
-
+    
+    @When("Mail user navigate to Accounts page and click on New button")
+    public void accessNewAccountPage() {
+    	 salesUser.accessNewAccountPage();
+    }
+    @When("Mail user search for an Account using $searchAccountName")
+    public void searchForAnAccountUsingAccountName(String searchAccountName){
+    	salesUser.searchForAnAccountUsingAccountName(searchAccountName);
+    }
+    
+    @When("Mail user access New Account from search results section")
+    public void accessNewAccountsPageviaSearchResults() {
+    	salesUser.accessNewAccountsPageviaSearchResults();
+    }
+    
+    @When("Mail user provides input data from CSV $file and create account")
+    public void supplyInputToCreateNumberofUserAccounts(String file){
+    	salesUser.read_csv_input(file);
+    }
+    
 }
