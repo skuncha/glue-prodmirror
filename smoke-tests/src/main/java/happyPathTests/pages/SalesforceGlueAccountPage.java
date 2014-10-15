@@ -330,7 +330,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								    	getDriver().navigate().back();
 								    	waitFor(8).seconds();
 									}
-									
 						waitFor(5).seconds();
 						createDirectOrder().click();
 								
@@ -490,7 +489,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								 {
 								    	 selectPrice().click();
 								    	 waitFor(5).seconds();
-								    	 selectRevenue().type(record.get("revenue"));
+								    	 selectRevenue().sendKeys(record.get("revenue"));
 								    	 waitFor(2).seconds();
 								    	 updateRevenue().click();
 								    	 waitFor(2).seconds();
