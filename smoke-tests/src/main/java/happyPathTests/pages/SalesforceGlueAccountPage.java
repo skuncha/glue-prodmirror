@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import net.thucydides.core.Thucydides;
 import net.thucydides.core.csv.CSVTestDataSource;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.WebElementFacade;
@@ -480,9 +481,10 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									 
 								 }
 								 element.findElement(By.xpath("//tbody/tr[6]/td[5]")).click(); /**************** Date Field*****************/
-						    	 waitFor(5).seconds(); 
+						    	 	waitFor(5).seconds();
+						    	 Thucydides.takeScreenshot();
 						    	 saveOrder().click();
-						    	 waitFor(15).seconds();
+						    	 	waitFor(10).seconds();
 						    	
 								 /***************** Price Details **************************/
 						    	 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")|| packageType.equalsIgnoreCase("Mail Display Inserts")) 
