@@ -151,14 +151,14 @@ public class SalesforceGlueAccountPage  extends PageObject {
     }
     
     public void accountCreation(){
-    		waitFor(6).seconds();
+    		waitFor(4).seconds();
     		accounts.click();
     		waitFor(6).seconds();
 			newButton().click();
 			waitFor(4).seconds();
 			searchCustomerName().type("xyz");
 	    	customerSearchButton.click();
-	    	waitFor(4).seconds();
+	    	waitFor(3).seconds();
 	    	newAccountButtonChild().click();
 	    	waitFor(3).seconds();
     }
@@ -438,7 +438,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									 addPackage().click();
 							    	 waitFor(6).seconds();
 							    /******************Supply Package Details************************/
-								 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")|| packageType.equalsIgnoreCase("Mail Display Inserts")) 
+								 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")) 
 								 {
 							    	 title().selectByVisibleText(record.get("title"));
 									 selectPublication().selectByVisibleText(record.get("publication"));
@@ -447,8 +447,8 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							    	 waitFor(6).seconds();
 							    	 selectZone().selectByVisibleText(record.get("zones"));
 							    	 waitFor(6).seconds();
-							    	 selectSubSection().selectByVisibleText(record.get(record.get("subsection"))); // subsection
-							    	 waitFor(4).seconds();
+							    	 selectSubSection().selectByVisibleText(record.get("subsection")); // subsection
+							    	 waitFor(6).seconds();
 							    	 selectModule().selectByVisibleText(record.get("module"));
 							    	 waitFor(5).seconds();
 							    	 nextMonth().click();
@@ -483,7 +483,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								 element.findElement(By.xpath("//tbody/tr[6]/td[5]")).click(); /**************** Date Field*****************/
 						    	 	waitFor(5).seconds();
 						    	 Thucydides.takeScreenshot();
-						    	 saveOrder().click();
+						    	 saveOrder().click(); 
 						    	 	waitFor(10).seconds();
 						    	
 								 /***************** Price Details **************************/
