@@ -445,10 +445,10 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							    	 waitFor(3).seconds();
 							    	 selectSection().selectByVisibleText(record.get("section"));
 							    	 waitFor(6).seconds();
-							    	 selectSubSection().selectByVisibleText(record.get(record.get("subsection"))); // subsection
-							    	 waitFor(4).seconds();
 							    	 selectZone().selectByVisibleText(record.get("zones"));
 							    	 waitFor(6).seconds();
+							    	 selectSubSection().selectByVisibleText(record.get(record.get("subsection"))); // subsection
+							    	 waitFor(4).seconds();
 							    	 selectModule().selectByVisibleText(record.get("module"));
 							    	 waitFor(5).seconds();
 							    	 nextMonth().click();
