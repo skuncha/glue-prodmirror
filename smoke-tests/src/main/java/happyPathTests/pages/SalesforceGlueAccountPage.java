@@ -473,9 +473,10 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									 selectPublication().selectByVisibleText(record.get("publication"));
 							    	 waitFor(3).seconds();
 							    	 selectSection().selectByVisibleText(record.get("section"));
-							    	 waitFor(4).seconds();
+							    	 waitFor(6).seconds();
 									 noOfInserts().type("2");
 									 element.findElement(By.xpath("//tbody/tr[6]/td[4]")).click();
+									 waitFor(6).seconds();
 								 }
 								 if (packageType.equalsIgnoreCase("Mail Display Non-Print")) {
 									 
@@ -486,7 +487,8 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						    	 saveOrder().click(); 
 						    	 	waitFor(10).seconds();
 						    	
-								 /***************** Price Details **************************/
+/***************** Price Details *******************************************************************/
+						    	 /******** MailPlus doesn't allow to fill price fields in normal way therefore price selection ignored *******/
 						    	 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")|| packageType.equalsIgnoreCase("Mail Display Inserts")) 
 								 {
 								    	 selectPrice().click();
