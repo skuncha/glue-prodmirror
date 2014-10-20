@@ -3,7 +3,7 @@
 !-- srinivasa.kuncha@dmgmedia.co.uk.systest   *best1234*
 Narrative:
 In order to Create Agency Accounts using CSV file
-As a Sales Reprasentative
+As a Sales Representative
 I want to login to SalesforceGlue and create Accounts
 
 Scenario: Sales reprasentative will be able to create accounts using CSV file

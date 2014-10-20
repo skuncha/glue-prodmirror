@@ -119,7 +119,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
     private WebElementFacade selectRevenue()   	 { return element(By.id("Order.Price:UserRevenue"));												}
     private WebElementFacade updateRevenue()   	 { return element(By.xpath("//fieldset/div/div[2]/div/div/span/button"));							}
     private WebElementFacade acceptOrder()   	 { return element(By.xpath("//nav[button='Accept']/button[3]"));									} 
-    
+   
 /***********************************************************************WEB ELEMENTS************************************************************************************/
 	public void type(String mytype) {
     	Select droplist = new Select(find(By.id("acc6")));   
@@ -342,7 +342,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							
 							    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group"))
 							    	{
-							    		
 							    		billingRef().click();
 							    		billingSelectionNext().click();
 							    		waitFor(5).seconds();
@@ -356,7 +355,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								    		} catch (Exception e) {}
 							    	}
 							    	else {
-							    		
 							    		billingSelection().selectByVisibleText("Direct");
 									 	billingSelectionNext().click();  
 							    	}
@@ -396,9 +394,9 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						finish().click();
 						
 /************** Launch OrderPlugin and Create Order*************************************************/
+
+						waitFor(20).seconds();
 						
-						 waitFor(20).seconds();
-						 
 						 /*String sourceURL =getDriver().findElement(By.xpath("//*[@id='j_id0:j_id8']/div[2]/iframe")).getAttribute("src");
 						 String[] firstsplit = sourceURL.split("authorizationcode=");
 						 System.out.println("FIRST SPLIT                 ----> " +firstsplit[1]);
@@ -475,6 +473,10 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							    	 selectSection().selectByVisibleText(record.get("section"));
 							    	 waitFor(6).seconds();
 									 noOfInserts().type("2");
+									 distribution().selectByVisibleText(record.get("distribution"));
+									 waitFor(6).seconds();
+									 nextMonth().click();
+									 waitFor(3).seconds();
 									 element.findElement(By.xpath("//tbody/tr[6]/td[4]")).click();
 									 waitFor(6).seconds();
 								 }
