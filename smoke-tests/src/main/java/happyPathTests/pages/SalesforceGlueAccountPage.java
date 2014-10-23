@@ -394,29 +394,9 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						finish().click();
 						
 /************** Launch OrderPlugin and Create Order*************************************************/
-
-						waitFor(20).seconds();
 						
-						 /*String sourceURL =getDriver().findElement(By.xpath("//*[@id='j_id0:j_id8']/div[2]/iframe")).getAttribute("src");
-						 String[] firstsplit = sourceURL.split("authorizationcode=");
-						 System.out.println("FIRST SPLIT                 ----> " +firstsplit[1]);
-						 String[] secondpartsplit = firstsplit[1].split("\\&clientid=");
-						 String acode = secondpartsplit[0];
-						 String add = "&clientid=";
-						 String orderinfo =secondpartsplit[1];
-						 System.out.println("AUTH CODE                      =>  "+acode);	
-						 acode ="2RF5up";
-						 String sampleURL = "https://test.cci-webaccess-dmgmedia.co.uk/salesforce/plugin/orders/create?userid=srinivasa.kuncha&group=Mail Display Sales&profile=ANL Credit&accountid="; 
-						 String customerid = "&advertiserid=";
-						 String confirmationURL= "&confirmationurl=";
-						 String authcode="&authorizationcode=";
-						 String redirect = "&bookings=[{\"packagename\":\"DM Display\",\"dates\":[\"2014-11-12\"]}]";
-						 String OrderURL=sampleURL.concat(financeID).concat(customerid).concat(ref).concat(confirmationURL).concat(clientURL).concat(authcode).concat(acode).concat(add).concat(orderinfo).concat(redirect);
-						 System.out.println("Srini Redirect URL  =>  "+OrderURL);*/
-						 
-/************************************************************************************************************/
-//					     getDriver().get(OrderURL);
-/************************************************************************************************************/
+							waitFor(20).seconds();
+
 							getDriver().switchTo().frame(getDriver().findElement(By.tagName("iframe")));
 							WebElement element = getDriver().switchTo().activeElement();
 							waitFor(2).seconds();
@@ -487,7 +467,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						    	 	waitFor(5).seconds();
 						    	 Thucydides.takeScreenshot();
 						    	 saveOrder().click(); 
-						    	 	waitFor(10).seconds();
+						    	 	waitFor(20).seconds();
 						    	
 /***************** Price Details *******************************************************************/
 						    	 /******** MailPlus doesn't allow to fill price fields in normal way therefore price selection ignored *******/
@@ -513,7 +493,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									    	 prepaymentwindow2.findElement(By.xpath("//input[@value='OK']")).click();
 									    	 }
 									    	 
-									    	 waitFor(16).seconds();
+									    	 waitFor(20).seconds();
 /*************************************************************************************************/
 						    	 try {
 							    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
@@ -526,7 +506,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 /************************************************************************************************/						
 				    	 						
 				    	 				    	if (readAccountName().isVisible()) {
-				    	 				    		waitFor(1).minutes();
+				    	 				    		waitFor(40).seconds();
 				    	 				    		searchTerms().type(financeID);
 				    	 				    		searchGlue().click();
 				    	 				    		waitFor(3).seconds();
