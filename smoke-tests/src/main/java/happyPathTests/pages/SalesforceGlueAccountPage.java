@@ -180,367 +180,379 @@ public class SalesforceGlueAccountPage  extends PageObject {
 		File filePath = new File(fileLoc);
 		if (filePath.isFile()) {
 			String file = filePath.getAbsolutePath();
-			
 				CSVTestDataSource testDataSrc = new CSVTestDataSource(file);
-				for (Map<String, String> record : testDataSrc.getData()) {
-				try{
-/************** Select Agency Type ******************************************/  
-				    selectAccountType().selectByVisibleText(record.get("type"));
-				    continueButt().click();
-				    long timeNow = System.currentTimeMillis();
-/************** Supply User Account details ********************************/  
-				  
-				    waitFor(5).seconds();
-				    String str = record.get("accountType");
-				    selectTypeOfAccount().selectByVisibleText(record.get("accountType"));
-			    	accountName().type(record.get("lastName") + " - "+ timeNow);
-			    	phoneNumber().type(record.get("phone"));
-			    	billingStreet().type(record.get("billingStreet"));
-			    	billingPostCode().type(record.get("postalCode"));
-
-					    	if (type().getText().equalsIgnoreCase("Brand")) {
-								parentAccount().type(record.get("parentAccount"));
-								waitABit(1000);
-							}
-			    	 
-					    	if (str.equalsIgnoreCase("Private Advertiser")) {
-					    		 salutation().selectByVisibleText(record.get("salutation"));
-				    		     firstname().type(record.get("firstName"));
-					    	}
-			    	
-					    	if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Brand")|| str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
-					    	{
-					    		waitABit(1000);
-								saveButton.click();
-								waitFor(6).seconds();
-								String Name = readAccountName().getText();
-						    	arraylist.add(Name);
-						    	clientURL = getDriver().getCurrentUrl();
-/**************************************************************************/ 
-									    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
-									    	{
-										    		String readClientAccountName = readAccountName().getText();
-										    		clientURL = getDriver().getCurrentUrl();
-										    		accountCreation();
-										    		selectAccountType().selectByVisibleText("Agency"); //Create Billing a/c
-										    		continueButt().click();
-										    		waitFor(3).seconds();
-													accountName().type("Billing Agency " + timeNow);
-										    		phoneNumber().type(record.get("phone"));
-											    	billingStreet().type(record.get("billingStreet"));
-											    	billingPostCode().type(record.get("postalCode"));
-											    	waitFor(1).seconds();
-													saveButton.click();
-													waitFor(8).seconds();
-													CCIMailIntegration(); // CCIMail Integration
-													financeAccount.click(); 
-													waitFor(5).seconds();
-													String id = SOPID().getText();
-													while(id.equals(" ")) {
-															waitFor(2).seconds();
-															getDriver().navigate().back();
-															waitFor(20).seconds();
-															financeAccount.click();
-															waitFor(5).seconds();
-															id = SOPID().getText();
-															synctimeforSOPID = synctimeforSOPID + 25;
-														}
-													financeID = id;
-													System.out.print("***** " +j + ". " + "A/C Name : "+arraylist.get(i) +  " +  SOPID : " +financeID + " + ");
-													getDriver().navigate().back();
-													waitFor(8).seconds();
-													newRelationship.click(); 
-													waitFor(3).seconds();
-													accountB_Name().type(readClientAccountName);
-											    	billing().selectByVisibleText("Billing");
-											    	saveRelationship.click();
-											    	waitFor(6).seconds();
-											    	getDriver().get(clientURL); // Back to client account page
-											    	waitFor(6).seconds();
-									    	}
-/************** Select Industry Category **********************************/
-							    	getDriver().switchTo().frame("066D0000000kh27");
-							    	WebElement editable = getDriver().switchTo().activeElement();
-							    	editable.findElement(By.cssSelector("input[name='j_id0:j_id1:j_id27:j_id28:j_id31']")).click();
-							    	waitFor(4).seconds();
-						    	   	mainCate().selectByVisibleText(record.get("mainCategory"));
-						    	   	waitFor(4).seconds();
-							 	    subCate().selectByVisibleText(record.get("subCategory"));
-							 	    waitFor(4).seconds();
-							 	    minorCate().selectByVisibleText(record.get("minorCategory"));
-							 	    waitFor(5).seconds();
-							 	    saveIndCate().sendKeys(Keys.RETURN);
-							 	    waitFor(4).seconds();
-								    getDriver().switchTo().defaultContent();
-					    	}
-						    	else 
-						    	{
-						    	saveButton.click();
-						    	waitFor(6).seconds();
-						    	String Name = readAccountName().getText();
-						    	arraylist.add(Name);
-						    	clientURL = getDriver().getCurrentUrl();
-						    	}
-					    	 
-									if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Brand")|| str.equalsIgnoreCase("Private Advertiser")){
-										
-										 CCIMailIntegration(); // CCIMail Integration
-										 accountMapping();    // CCIMail Integration Account Mapping  
-										 
-												if (str.equalsIgnoreCase("Private Advertiser")){
-													privateAdvFinanceAccount.click();   /***** DEPENDENDT ON POSTCODE SUPPLIED*************/
-													waitFor(5).seconds();
-													String id = SOPID().getText();
-													while(id.equals(" ")) {
-															waitFor(2).seconds();
-															getDriver().navigate().back();
-															waitFor(20).seconds();
-															privateAdvFinanceAccount.click();
-															waitFor(5).seconds();
-															id = SOPID().getText();
-															synctimeforSOPID = synctimeforSOPID + 25;
-													}
-												} 
-												else 
-													{ 
-														financeAccount.click(); 
-													}	
-												
-												waitFor(5).seconds();
-												String id = SOPID().getText();
-												while(id.equals(" ")) {
-														waitFor(2).seconds();
-														getDriver().navigate().back();
-														waitFor(20).seconds();
-														financeAccount.click();
-														waitFor(5).seconds();
-														id = SOPID().getText();
-														synctimeforSOPID = synctimeforSOPID + 25;
-													}
-										 financeID = id;
-										 ref =CCIMailCustomerID().getText();
-										System.out.print("***** " +j + ". " +"A/C Name : "+arraylist.get(i) + " +  A/C ID : " +ref + " +  SOPID : " +SOPID().getText() + " + ");
-										getDriver().navigate().back();
-									}
-									else {
-										CCIMailIntegration();
-										accountMapping.click();
-								    	waitFor(3).seconds();
-								    	ref = customerRef().getText();
-								    	getDriver().navigate().back();
-								    	waitFor(8).seconds();
-									}
-						waitFor(5).seconds();
-						createDirectOrder().click();
-								
-/**************  Select Order Type *************************************************************/
-				    	
-						if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
-				    	{
-							    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group"))
-							    	{
-							    		billingRef().click();
-							    		billingSelectionNext().click();
-							    		waitFor(5).seconds();
-								    		try {
-								    			 while(busyIntegrating().getText()!=null) {
-								    				 
-								    				 waitFor(30).seconds();
-								    				 syncNext().click();
-								    				 synctimeforSOPID = synctimeforSOPID + 30;
-								    			 }
-								    		} catch (Exception e) {}
-							    	}
-							    	else {
-							    		billingSelection().selectByVisibleText("Direct");
-									 	billingSelectionNext().click();  
-							    	}
-				    	}	
-					if (str.equalsIgnoreCase("Brand"))
+			for (Map<String, String> record : testDataSrc.getData()) 
+			{
+					try
 					{
-						waitFor(3).seconds();
-			    		billingOption().selectByVisibleText("Direct");
-			    		billingSelectionNext().click(); 
-			    	}
-/**************  Create Contact ******************************************************************/
-					 	
-					 	waitFor(4).seconds();
-						conSalutation().selectByVisibleText(record.get("salutation"));
-		    		    conFirstName().type(record.get("firstName"));
-		    		    conLastName().type(timeNow + record.get("lastName"));
-				    	emailAddress().type(record.get("email"));
-					   	conPhonenumebr().type(record.get("phone"));
-					   	
-/**************  Associate Account*****************************************************************/				    	
-				    	
-					   	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
-					   	{
-				    		selectBillingRef().click();
-				    		waitFor(1).seconds();
-				    		i++;
-				    	}
-						   	else 
-						   	{
-						   		String endUseraccount = arraylist.get(i);
-								accountType().selectByVisibleText(endUseraccount);
-								waitFor(1).seconds();
-								i++;
-						   	}
-						contactNext().click();
-						waitFor(1).seconds();
-						finish().click();
-						
-/************** Launch OrderPlugin and Create Order*************************************************/
-						
-							waitFor(16).seconds();
-							getDriver().switchTo().frame(getDriver().findElement(By.tagName("iframe")));
-							WebElement element = getDriver().switchTo().activeElement();
-							waitFor(2).seconds();
-							String packageType = record.get("package");
-							element.findElement(By.xpath("//td[div="+"'"+packageType+"'"+"]")).click();
-							waitFor(10).seconds();
-							
-								/*******************Order Information***********************/
-								 orderPurchaseNo().sendKeys(record.get("PONumber"));
-								 orderNote().sendKeys(record.get("orderNote"));
-								 orderUrgentNote().sendKeys(record.get("urgentNote"));
-//								 orderSalesRepId().sendKeys("Tom Leader");
-								 
-							    /******************Package Selection**************************/
-									 addPackage().click();
-									 waitFor(4).seconds();
-									 addPackage().click();
-							    	 waitFor(6).seconds();
-							    /******************Supply Package Details************************/
-								 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")) 
-								 {
-							    	 title().selectByVisibleText(record.get("title"));
-									 selectPublication().selectByVisibleText(record.get("publication"));
-							    	 waitFor(3).seconds();
-							    	 selectSection().selectByVisibleText(record.get("section"));
-							    	 waitFor(6).seconds();
-							    	 selectZone().selectByVisibleText(record.get("zones"));
-							    	 waitFor(6).seconds();
-							    	 selectSubSection().selectByVisibleText(record.get("subsection")); // subsection
-							    	 waitFor(6).seconds();
-							    	 selectModule().selectByVisibleText(record.get("module"));
-							    	 waitFor(5).seconds();
-							    	 nextMonth().click();
-									 waitFor(3).seconds();
-								 }
-								 if (packageType.equalsIgnoreCase("MailPlus")) {
-									 
-									 webSiteCategory().selectByVisibleText(record.get("websitecategory"));
-									 waitFor(3).seconds();
-									 webSite().selectByVisibleText(record.get("website"));
-									 waitFor(4).seconds();
-									 selectSection().selectByVisibleText(record.get("section"));
-							    	 waitFor(4).seconds();
-									 selectZone().selectByVisibleText(record.get("adunit"));
-									 waitFor(6).seconds();
-									 nextMonth().click();
-									 waitFor(3).seconds();
-								 }
-								 if (packageType.equalsIgnoreCase("Mail Display Inserts")) {
-									 
-									 title().selectByVisibleText(record.get("title"));
-									 selectPublication().selectByVisibleText(record.get("publication"));
-							    	 waitFor(3).seconds();
-							    	 selectSection().selectByVisibleText(record.get("section"));
-							    	 waitFor(6).seconds();
-									 noOfInserts().type("2");
-									 distribution().selectByVisibleText(record.get("distribution"));
-									 waitFor(6).seconds();
-									 nextMonth().click();
-									 waitFor(3).seconds();
-									 element.findElement(By.xpath("//tbody/tr[6]/td[4]")).click();
-									 waitFor(6).seconds();
-								 }
-								 if (packageType.equalsIgnoreCase("Mail Display Non-Print")) {
-									 
-								 }
-								 element.findElement(By.xpath("//tbody/tr[5]/td[4]")).click(); /**************** Date Field*****************/
-						    	 	waitFor(5).seconds();
-						    	 Thucydides.takeScreenshot();
-						    	 /*saveOrder().click(); 
-						    	 	waitFor(20).seconds();*/
-						    	
-/***************** Price Details *******************************************************************/
-						    	 /******** MailPlus doesn't allow to fill price fields in normal way therefore price selection ignored *******/
-						    	 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")|| packageType.equalsIgnoreCase("Mail Display Inserts")) 
-								 {
-								    	 selectPrice().click();
-								    	 waitFor(5).seconds();
-								    	 selectRevenue().sendKeys(record.get("revenue"));
-								    	 waitFor(2).seconds();
-								    	 updateRevenue().click();
-								    	 waitFor(2).seconds();
-								 }
-/************************************ Accept Order *************************************************/	
-						    	 
-									 acceptOrder().click();
-									 
-									    	 if(str.equalsIgnoreCase("Private Advertiser") || str.equalsIgnoreCase("Direct Advertiser")|| str.equalsIgnoreCase("Brand")) {
-									    	 waitFor(3).seconds();
-									    	 WebElement prepaymentwindow1 = getDriver().switchTo().activeElement();
-									    	 waitFor(1).seconds();
-									    	 prepaymentwindow1.findElement(By.xpath("//input[@value='Prepay']")).click();
-									    	 waitFor(3).seconds();
-									    	 WebElement prepaymentwindow2 = getDriver().switchTo().activeElement();
-									    	 waitFor(1).seconds();
-									    	 prepaymentwindow2.findElement(By.xpath("//input[@value='OK']")).click();
-									    	 }
+						   /************** Select Agency Type ******************************************/  
+						    selectAccountType().selectByVisibleText(record.get("type"));
+						    continueButt().click();
+						    long timeNow = System.currentTimeMillis();
+						    /************** Supply User Account details ********************************/  
+				  
+						    waitFor(5).seconds();
+						    String str = record.get("accountType");
+						    selectTypeOfAccount().selectByVisibleText(record.get("accountType"));
+					    	accountName().type(record.get("lastName") + " - "+ timeNow);
+					    	phoneNumber().type(record.get("phone"));
+					    	billingStreet().type(record.get("billingStreet"));
+					    	billingPostCode().type(record.get("postalCode"));
+		
+							    	if (type().getText().equalsIgnoreCase("Brand"))
+							    	{
+										parentAccount().type(record.get("parentAccount"));
+										waitABit(1000);
+									}
+					    	 
+							    	if (str.equalsIgnoreCase("Private Advertiser"))
+							    	{
+							    		 salutation().selectByVisibleText(record.get("salutation"));
+						    		     firstname().type(record.get("firstName"));
+							    	}
+					    	
+							    	if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Brand")|| str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
+							    	{
+							    		waitABit(1000);
+										saveButton.click();
+										waitFor(6).seconds();
+										String Name = readAccountName().getText();
+								    	arraylist.add(Name);
+								    	clientURL = getDriver().getCurrentUrl();
+		/**************************************************************************/ 
+											    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
+											    	{
+												    		String readClientAccountName = readAccountName().getText();
+												    		clientURL = getDriver().getCurrentUrl();
+												    		accountCreation();
+												    		selectAccountType().selectByVisibleText("Agency"); //Create Billing a/c
+												    		continueButt().click();
+												    		waitFor(3).seconds();
+															accountName().type("Billing Agency " + timeNow);
+												    		phoneNumber().type(record.get("phone"));
+													    	billingStreet().type(record.get("billingStreet"));
+													    	billingPostCode().type(record.get("postalCode"));
+													    	waitFor(1).seconds();
+															saveButton.click();
+															waitFor(8).seconds();
+															CCIMailIntegration(); // CCIMail Integration
+															financeAccount.click(); 
+															waitFor(5).seconds();
+															String id = SOPID().getText();
+															while(id.equals(" "))
+															{
+																	waitFor(2).seconds();
+																	getDriver().navigate().back();
+																	waitFor(20).seconds();
+																	financeAccount.click();
+																	waitFor(5).seconds();
+																	id = SOPID().getText();
+																	synctimeforSOPID = synctimeforSOPID + 25;
+															}
+															financeID = id;
+															System.out.print("***** " +j + ". " + "A/C Name : "+arraylist.get(i) +  " +  SOPID : " +financeID + " + ");
+															getDriver().navigate().back();
+															waitFor(8).seconds();
+															newRelationship.click(); 
+															waitFor(3).seconds();
+															accountB_Name().type(readClientAccountName);
+													    	billing().selectByVisibleText("Billing");
+													    	saveRelationship.click();
+													    	waitFor(6).seconds();
+													    	getDriver().get(clientURL); // Back to client account page
+													    	waitFor(6).seconds();
+											    	}
+		/************** Select Industry Category **********************************/
+									    	getDriver().switchTo().frame("066D0000000kh27");
+									    	WebElement editable = getDriver().switchTo().activeElement();
+									    	editable.findElement(By.cssSelector("input[name='j_id0:j_id1:j_id27:j_id28:j_id31']")).click();
+									    	waitFor(4).seconds();
+								    	   	mainCate().selectByVisibleText(record.get("mainCategory"));
+								    	   	waitFor(4).seconds();
+									 	    subCate().selectByVisibleText(record.get("subCategory"));
+									 	    waitFor(4).seconds();
+									 	    minorCate().selectByVisibleText(record.get("minorCategory"));
+									 	    waitFor(5).seconds();
+									 	    saveIndCate().sendKeys(Keys.RETURN);
+									 	    waitFor(4).seconds();
+										    getDriver().switchTo().defaultContent();
+							    	}
+								    	else 
+									    	{
+									    	saveButton.click();
+									    	waitFor(6).seconds();
+									    	String Name = readAccountName().getText();
+									    	arraylist.add(Name);
+									    	clientURL = getDriver().getCurrentUrl();
+									    	}
+							    	 
+											if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Brand")|| str.equalsIgnoreCase("Private Advertiser"))
+											{
+												 CCIMailIntegration(); // CCIMail Integration
+												 accountMapping();    // CCIMail Integration Account Mapping  
+												 
+														if (str.equalsIgnoreCase("Private Advertiser"))
+														{
+															privateAdvFinanceAccount.click();   /***** DEPENDENDT ON POSTCODE SUPPLIED*************/
+															waitFor(5).seconds();
+															String id = SOPID().getText();
+															while(id.equals(" "))
+															{
+																	waitFor(2).seconds();
+																	getDriver().navigate().back();
+																	waitFor(20).seconds();
+																	privateAdvFinanceAccount.click();
+																	waitFor(5).seconds();
+																	id = SOPID().getText();
+																	synctimeforSOPID = synctimeforSOPID + 25;
+															}
+														} 
+														else 
+														{ 
+																financeAccount.click(); 
+														}	
+														waitFor(5).seconds();
+														String id = SOPID().getText();
+														while(id.equals(" ")) 
+														{
+																waitFor(2).seconds();
+																getDriver().navigate().back();
+																waitFor(20).seconds();
+																financeAccount.click();
+																waitFor(5).seconds();
+																id = SOPID().getText();
+																synctimeforSOPID = synctimeforSOPID + 25;
+														}
+												 financeID = id;
+												 ref =CCIMailCustomerID().getText();
+												System.out.print("***** " +j + ". " +"A/C Name : "+arraylist.get(i) + " +  A/C ID : " +ref + " +  SOPID : " +SOPID().getText() + " + ");
+												getDriver().navigate().back();
+											}
+											else 
+											{
+												CCIMailIntegration();
+												accountMapping.click();
+										    	waitFor(3).seconds();
+										    	ref = customerRef().getText();
+										    	getDriver().navigate().back();
+										    	waitFor(8).seconds();
+											}
+								waitFor(5).seconds();
+								createDirectOrder().click();
+			/**************  Select Order Type *************************************************************/
+							    	
+									if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
+							    	{
+										    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group"))
+										    	{
+										    		billingRef().click();
+										    		billingSelectionNext().click();
+										    		waitFor(5).seconds();
+											    		try {
+											    				while(busyIntegrating().getText()!=null) 
+												    			 {
+												    				 
+												    				 waitFor(30).seconds();
+												    				 syncNext().click();
+												    				 synctimeforSOPID = synctimeforSOPID + 30;
+												    			 }
+											    			} catch (Exception e) {}
+										    	}
+										    	else 
+										    	{
+										    		billingSelection().selectByVisibleText("Direct");
+												 	billingSelectionNext().click();  
+										    	}
+							    	}	
+								if (str.equalsIgnoreCase("Brand"))
+								{
+									waitFor(3).seconds();
+						    		billingOption().selectByVisibleText("Direct");
+						    		billingSelectionNext().click(); 
+						    	}
+			/**************  Create Contact ******************************************************************/
+								 	waitFor(4).seconds();
+									conSalutation().selectByVisibleText(record.get("salutation"));
+					    		    conFirstName().type(record.get("firstName"));
+					    		    conLastName().type(timeNow + record.get("lastName"));
+							    	emailAddress().type(record.get("email"));
+								   	conPhonenumebr().type(record.get("phone"));
+								   	
+			/**************  Associate Account*****************************************************************/				    	
+							    	
+								   	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
+								   	{
+							    		selectBillingRef().click();
+							    		waitFor(1).seconds();
+							    		i++;
+							    	}
+									   	else 
+									   	{
+									   		String endUseraccount = arraylist.get(i);
+											accountType().selectByVisibleText(endUseraccount);
+											waitFor(1).seconds();
+											i++;
+									   	}
+									contactNext().click();
+									waitFor(1).seconds();
+									finish().click();
+									
+			/************** Launch OrderPlugin and Create Order*************************************************/
+									
+										waitFor(16).seconds();
+										getDriver().switchTo().frame(getDriver().findElement(By.tagName("iframe")));
+										WebElement element = getDriver().switchTo().activeElement();
+										waitFor(2).seconds();
+										String packageType = record.get("package");
+										element.findElement(By.xpath("//td[div="+"'"+packageType+"'"+"]")).click();
+										waitFor(10).seconds();
+										
+											/*******************Order Information***********************/
+											 orderPurchaseNo().sendKeys(record.get("PONumber"));
+											 orderNote().sendKeys(record.get("orderNote"));
+											 orderUrgentNote().sendKeys(record.get("urgentNote"));
+			//								 orderSalesRepId().sendKeys("Tom Leader");
+											 
+										    /******************Package Selection**************************/
+												 addPackage().click();
+												 waitFor(4).seconds();
+												 addPackage().click();
+										    	 waitFor(6).seconds();
+										    /******************Supply Package Details************************/
+											 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")) 
+											 {
+										    	 title().selectByVisibleText(record.get("title"));
+												 selectPublication().selectByVisibleText(record.get("publication"));
+										    	 waitFor(3).seconds();
+										    	 selectSection().selectByVisibleText(record.get("section"));
+										    	 waitFor(6).seconds();
+										    	 selectZone().selectByVisibleText(record.get("zones"));
+										    	 waitFor(6).seconds();
+										    	 selectSubSection().selectByVisibleText(record.get("subsection")); // subsection
+										    	 waitFor(6).seconds();
+										    	 selectModule().selectByVisibleText(record.get("module"));
+										    	 waitFor(5).seconds();
+										    	 nextMonth().click();
+												 waitFor(3).seconds();
+											 }
+											 if (packageType.equalsIgnoreCase("MailPlus")) {
+												 
+												 webSiteCategory().selectByVisibleText(record.get("websitecategory"));
+												 waitFor(3).seconds();
+												 webSite().selectByVisibleText(record.get("website"));
+												 waitFor(4).seconds();
+												 selectSection().selectByVisibleText(record.get("section"));
+										    	 waitFor(4).seconds();
+												 selectZone().selectByVisibleText(record.get("adunit"));
+												 waitFor(6).seconds();
+												 nextMonth().click();
+												 waitFor(3).seconds();
+											 }
+											 if (packageType.equalsIgnoreCase("Mail Display Inserts")) {
+												 
+												 title().selectByVisibleText(record.get("title"));
+												 selectPublication().selectByVisibleText(record.get("publication"));
+										    	 waitFor(3).seconds();
+										    	 selectSection().selectByVisibleText(record.get("section"));
+										    	 waitFor(6).seconds();
+												 noOfInserts().type("2");
+												 distribution().selectByVisibleText(record.get("distribution"));
+												 waitFor(6).seconds();
+												 nextMonth().click();
+												 waitFor(3).seconds();
+												 element.findElement(By.xpath("//tbody/tr[6]/td[4]")).click();
+												 waitFor(6).seconds();
+											 }
+											 if (packageType.equalsIgnoreCase("Mail Display Non-Print")) {
+												 
+											 }
+											 element.findElement(By.xpath("//tbody/tr[5]/td[4]")).click(); /**************** Date Field*****************/
+									    	 	waitFor(5).seconds();
+									    	 Thucydides.takeScreenshot();
+									    	 /*saveOrder().click(); 
+									    	 	waitFor(20).seconds();*/
+									    	
+			/***************** Price Details *******************************************************************/
+									    	 /******** MailPlus doesn't allow to fill price fields in normal way therefore price selection ignored *******/
+									    	 if (packageType.equalsIgnoreCase("DM Display") || packageType.equalsIgnoreCase("TMOS Display")|| packageType.equalsIgnoreCase("Mail Display Inserts")) 
+											 {
+											    	 selectPrice().click();
+											    	 waitFor(5).seconds();
+											    	 selectRevenue().sendKeys(record.get("revenue"));
+											    	 waitFor(2).seconds();
+											    	 updateRevenue().click();
+											    	 waitFor(2).seconds();
+											 }
+			/************************************ Accept Order *************************************************/	
 									    	 
-									    	 waitFor(20).seconds();
-/*************************************************************************************************/
-						    	 try {
-							    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
-							    	 if(wait1.until(ExpectedConditions.alertIsPresent())!=null)
-							    	      getDriver().switchTo().alert().accept();
-							    	 }
-							    	 catch (Exception e) {}
-						    	 
-						    	 getDriver().switchTo().defaultContent();
-/************************************************************************************************/						
-				    	 						
-				    	 				    	if (readAccountName().isVisible()) 
-				    	 				    	{
-				    	 				    		waitFor(40).seconds();
-				    	 				    		searchTerms().type(financeID);
-				    	 				    		searchGlue().click();
-				    	 				    		waitFor(3).seconds();
-				    	 				    		try {
-				    	 				    		if (orderlink().isVisible())
-				    	 				    		{ 
-				    	 				    			clickOn(orderlink());
-				    	 				    			System.out.print(" Order ID : " + orderID().getText());
-				    	 				    		}
-				    	 				    		}catch (Exception e) { System.out
-															.print(" *** ORDER ID DIDN'T SYNC BACK TO GLUE WITH IN 60 SECONDS"); }
-				    	 				    		accountCreation();
-				    	 				    		System.out.println("\n*****     SYNC WAIT TIME FOR SOPID IS  : "+synctimeforSOPID + " SECONDS");
-				    	 				    		j++;
-				    	 				    		synctimeforSOPID =10;
-				    	 				    	}
-/**********************************************************************************************/	
+												 acceptOrder().click();
+												 
+												    	 if(str.equalsIgnoreCase("Private Advertiser") || str.equalsIgnoreCase("Direct Advertiser")|| str.equalsIgnoreCase("Brand")) 
+												    	 {
+													    	 waitFor(3).seconds();
+													    	 WebElement prepaymentwindow1 = getDriver().switchTo().activeElement();
+													    	 waitFor(1).seconds();
+													    	 prepaymentwindow1.findElement(By.xpath("//input[@value='Prepay']")).click();
+													    	 waitFor(3).seconds();
+													    	 WebElement prepaymentwindow2 = getDriver().switchTo().activeElement();
+													    	 waitFor(1).seconds();
+													    	 prepaymentwindow2.findElement(By.xpath("//input[@value='OK']")).click();
+												    	 }
+												    	 
+												    	 waitFor(12).seconds();
+			/*************************************************************************************************/
+												    	 try {
+													    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
+													    	 if(wait1.until(ExpectedConditions.alertIsPresent())!=null)
+													    	      getDriver().switchTo().alert().accept();
+													    	 }
+													    	 catch (Exception e) {}
+									    	 
+									    	 getDriver().switchTo().defaultContent();
+			/************************************************************************************************/						
+							    	 						
+							    	 				    	if (readAccountName().isVisible()) 
+							    	 				    	{
+							    	 				    		waitFor(5).seconds();
+							    	 				    		searchTerms().type(financeID);
+							    	 				    		searchGlue().click();
+							    	 				    		waitFor(3).seconds();
+							    	 				    		try {
+									    	 				    		if (orderlink().isVisible())
+									    	 				    		{ 
+									    	 				    			clickOn(orderlink());
+									    	 				    			waitFor(2).seconds();
+									    	 				    			System.out.print(" Order ID : " + orderID().getText());
+									    	 				    		}
+									    	 				    		
+							    	 				    		}catch (Exception e) { System.out.print(" *** ORDER ID DIDN'T SYNC BACK TO GLUE WITH IN 20 SECONDS"); }
+							    	 				    		accountCreation();
+							    	 				    		System.out.println("\n*****     SYNC WAIT TIME FOR SOPID IS  : "+synctimeforSOPID + " SECONDS");
+							    	 				    		j++;
+							    	 				    		synctimeforSOPID =10;
+							    	 				    	}
+			/**********************************************************************************************/	
 			
-			  } catch (Exception e1) 
+						 
+			} catch (Exception e1) 
 				{
 					e1.getMessage();
 					System.out.println(" ----->  Unable to create Order due to Latency/Data Issue");
 					getDriver().get("https://dmgsalescloud--prodmirror.cs8.my.salesforce.com/001/o");
 					waitABit(3000);
-					accountCreation();
+					
 					try {
 				    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
 				    	 if(wait1.until(ExpectedConditions.alertIsPresent())!=null)
 				    	      getDriver().switchTo().alert().accept();
 				    	 }
-				    	 catch (Exception e) {}
+				    	 catch (Exception e) {e.getCause();}
 				}
-					waitABit(1000);
-		} //for loop end
-				
+				accountCreation();
+				waitABit(1000);
 		}
 	}
-}
+   }
+ }
+	
+
