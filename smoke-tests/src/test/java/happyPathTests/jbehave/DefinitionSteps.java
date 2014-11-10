@@ -1,5 +1,7 @@
 package happyPathTests.jbehave;
 
+import java.io.IOException;
+
 import net.thucydides.core.annotations.Steps;
 
 import org.jbehave.core.annotations.Given;
@@ -47,7 +49,7 @@ public class DefinitionSteps {
     }
     
     @When("Mail user provides input data from CSV $file and create account")
-    public void supplyInputToCreateNumberofUserAccounts(String file){
+    public void supplyInputToCreateNumberofUserAccounts(String file) throws IOException{
     	salesUser.read_csv_input(file);
     }
     

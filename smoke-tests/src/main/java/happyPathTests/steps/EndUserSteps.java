@@ -1,6 +1,7 @@
 package happyPathTests.steps;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import happyPathTests.pages.SalesforceGlueContactsPage;
@@ -53,8 +54,9 @@ public class EndUserSteps extends ScenarioSteps {
 		accountPage.newAccountButtonFromSearchResultsSection();
     }
     
-/**************************************************CSVFile**********************************************/
-    public void read_csv_input(String file) {
+/**************************************************CSVFile
+ * @throws IOException **********************************************/
+    public void read_csv_input(String file) throws IOException {
 
     	SalesforceGlueAccountPage accountPage = getPages().get(SalesforceGlueAccountPage.class);
     	accountPage.read_input(file);

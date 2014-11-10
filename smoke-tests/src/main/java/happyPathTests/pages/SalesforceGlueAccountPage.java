@@ -66,7 +66,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 	private WebElementFacade conFirstName() 		{ return element(By.id("j_id0:j_id1:i:f:pb:d:FirstName.input"));			}
 	private WebElementFacade conLastName() 			{ return element(By.id("j_id0:j_id1:i:f:pb:d:LastName.input"));				}
 	private WebElementFacade conPhonenumebr() 		{ return element(By.id("j_id0:j_id1:i:f:pb:d:Phone.input"));				}
-	private WebElementFacade orderId() 				{ return element(By.xpath("//*[@id='salesforce-plugin']/article/aside[1]/div/div/pre"));		}
+	
 	
 	@FindBy(how = How.LINK_TEXT, using = "Accounts")
 	private WebElement accounts;
@@ -166,25 +166,25 @@ public class SalesforceGlueAccountPage  extends PageObject {
     public void CCIMailIntegration(){
     	
     	CCICustomerMail().click();
-    	waitFor(8).seconds();
+    	waitFor(6).seconds();
 		getDriver().switchTo().alert().accept();  
 		waitFor(15).seconds();
 		getDriver().switchTo().alert().accept(); 
 		waitFor(8).seconds();
     }
     
-/**************************************************************CSVFile*****************************************************/
-    public void read_input(String fileLoc) {
+/**************************************************************CSVFile
+ * @throws IOException *****************************************************/
+    public void read_input(String fileLoc) throws IOException {
     	System.out.println("\n");
 		File filePath = new File(fileLoc);
 		if (filePath.isFile()) {
 			String file = filePath.getAbsolutePath();
-			try {
+			
 				CSVTestDataSource testDataSrc = new CSVTestDataSource(file);
 				for (Map<String, String> record : testDataSrc.getData()) {
-				
+				try{
 /************** Select Agency Type ******************************************/  
-					
 				    selectAccountType().selectByVisibleText(record.get("type"));
 				    continueButt().click();
 				    long timeNow = System.currentTimeMillis();
@@ -212,10 +212,10 @@ public class SalesforceGlueAccountPage  extends PageObject {
 					    	{
 					    		waitABit(1000);
 								saveButton.click();
+								waitFor(6).seconds();
 								String Name = readAccountName().getText();
 						    	arraylist.add(Name);
 						    	clientURL = getDriver().getCurrentUrl();
-						    	waitFor(6).seconds();
 /**************************************************************************/ 
 									    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
 									    	{
@@ -276,17 +276,16 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						    	else 
 						    	{
 						    	saveButton.click();
+						    	waitFor(6).seconds();
 						    	String Name = readAccountName().getText();
 						    	arraylist.add(Name);
 						    	clientURL = getDriver().getCurrentUrl();
-						    	waitFor(6).seconds();
 						    	}
 					    	 
 									if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Brand")|| str.equalsIgnoreCase("Private Advertiser")){
 										
 										 CCIMailIntegration(); // CCIMail Integration
-										 waitFor(8).seconds();
-										 accountMapping(); /**************  Account Mapping  *******************************************/
+										 accountMapping();    // CCIMail Integration Account Mapping  
 										 
 												if (str.equalsIgnoreCase("Private Advertiser")){
 													privateAdvFinanceAccount.click();   /***** DEPENDENDT ON POSTCODE SUPPLIED*************/
@@ -338,8 +337,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 				    	
 						if (str.equalsIgnoreCase("Direct Advertiser") || str.equalsIgnoreCase("Charity") || str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group")) 
 				    	{
-							waitFor(6).seconds();
-							
 							    	if (str.equalsIgnoreCase("Client") || str.equalsIgnoreCase("DMGT Group"))
 							    	{
 							    		billingRef().click();
@@ -396,7 +393,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 /************** Launch OrderPlugin and Create Order*************************************************/
 						
 							waitFor(20).seconds();
-
 							getDriver().switchTo().frame(getDriver().findElement(By.tagName("iframe")));
 							WebElement element = getDriver().switchTo().activeElement();
 							waitFor(2).seconds();
@@ -408,7 +404,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								 orderPurchaseNo().sendKeys(record.get("PONumber"));
 								 orderNote().sendKeys(record.get("orderNote"));
 								 orderUrgentNote().sendKeys(record.get("urgentNote"));
-								 orderSalesRepId().sendKeys("Tom Leader");
+//								 orderSalesRepId().sendKeys("Tom Leader");
 								 
 							    /******************Package Selection**************************/
 									 addPackage().click();
@@ -463,11 +459,11 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								 if (packageType.equalsIgnoreCase("Mail Display Non-Print")) {
 									 
 								 }
-								 element.findElement(By.xpath("//tbody/tr[6]/td[5]")).click(); /**************** Date Field*****************/
+								 element.findElement(By.xpath("//tbody/tr[5]/td[4]")).click(); /**************** Date Field*****************/
 						    	 	waitFor(5).seconds();
 						    	 Thucydides.takeScreenshot();
-						    	 saveOrder().click(); 
-						    	 	waitFor(20).seconds();
+						    	 /*saveOrder().click(); 
+						    	 	waitFor(20).seconds();*/
 						    	
 /***************** Price Details *******************************************************************/
 						    	 /******** MailPlus doesn't allow to fill price fields in normal way therefore price selection ignored *******/
@@ -481,7 +477,9 @@ public class SalesforceGlueAccountPage  extends PageObject {
 								    	 waitFor(2).seconds();
 								 }
 /************************************ Accept Order *************************************************/	
-									    	 acceptOrder().click();
+						    	 
+									 acceptOrder().click();
+									 
 									    	 if(str.equalsIgnoreCase("Private Advertiser") || str.equalsIgnoreCase("Direct Advertiser")|| str.equalsIgnoreCase("Brand")) {
 									    	 waitFor(3).seconds();
 									    	 WebElement prepaymentwindow1 = getDriver().switchTo().activeElement();
@@ -505,7 +503,8 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						    	 getDriver().switchTo().defaultContent();
 /************************************************************************************************/						
 				    	 						
-				    	 				    	if (readAccountName().isVisible()) {
+				    	 				    	if (readAccountName().isVisible()) 
+				    	 				    	{
 				    	 				    		waitFor(40).seconds();
 				    	 				    		searchTerms().type(financeID);
 				    	 				    		searchGlue().click();
@@ -524,11 +523,22 @@ public class SalesforceGlueAccountPage  extends PageObject {
 				    	 				    		synctimeforSOPID =10;
 				    	 				    	}
 /**********************************************************************************************/	
-			}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			waitABit(1000);
+			
+			  } catch (Exception e1) 
+				{
+					e1.getMessage();
+					System.out.println(" ----->  Unable to create Order due to Latency/Data Issue");
+					accountCreation();
+					try {
+				    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
+				    	 if(wait1.until(ExpectedConditions.alertIsPresent())!=null)
+				    	      getDriver().switchTo().alert().accept();
+				    	 }
+				    	 catch (Exception e) {}
+				}
+					waitABit(1000);
+		} //for loop end
+				
 		}
 	}
 }
