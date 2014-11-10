@@ -392,13 +392,13 @@ public class SalesforceGlueAccountPage  extends PageObject {
 						
 /************** Launch OrderPlugin and Create Order*************************************************/
 						
-							waitFor(20).seconds();
+							waitFor(16).seconds();
 							getDriver().switchTo().frame(getDriver().findElement(By.tagName("iframe")));
 							WebElement element = getDriver().switchTo().activeElement();
 							waitFor(2).seconds();
 							String packageType = record.get("package");
 							element.findElement(By.xpath("//td[div="+"'"+packageType+"'"+"]")).click();
-							waitFor(5).seconds();
+							waitFor(10).seconds();
 							
 								/*******************Order Information***********************/
 								 orderPurchaseNo().sendKeys(record.get("PONumber"));
@@ -528,6 +528,8 @@ public class SalesforceGlueAccountPage  extends PageObject {
 				{
 					e1.getMessage();
 					System.out.println(" ----->  Unable to create Order due to Latency/Data Issue");
+					getDriver().get("https://dmgsalescloud--prodmirror.cs8.my.salesforce.com/001/o");
+					waitABit(3000);
 					accountCreation();
 					try {
 				    	 WebDriverWait wait1 = new WebDriverWait(getDriver(), 5);
