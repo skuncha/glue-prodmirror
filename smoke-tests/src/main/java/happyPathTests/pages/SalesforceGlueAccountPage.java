@@ -216,6 +216,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							    		waitABit(1000);
 										saveButton.click();
 										waitFor(6).seconds();
+										Thucydides.takeScreenshot();
 										String Name = readAccountName().getText();
 								    	arraylist.add(Name);
 								    	clientURL = getDriver().getCurrentUrl();
@@ -281,6 +282,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 									    	{
 									    	saveButton.click();
 									    	waitFor(6).seconds();
+									    	Thucydides.takeScreenshot();
 									    	String Name = readAccountName().getText();
 									    	arraylist.add(Name);
 									    	clientURL = getDriver().getCurrentUrl();
@@ -405,14 +407,14 @@ public class SalesforceGlueAccountPage  extends PageObject {
 										waitFor(2).seconds();
 										String packageType = record.get("package");
 										element.findElement(By.xpath("//td[div="+"'"+packageType+"'"+"]")).click();
-										waitFor(10).seconds();
+										waitFor(12).seconds();
 										
 											/*******************Order Information***********************/
 											 orderPurchaseNo().sendKeys(record.get("PONumber"));
 											 orderNote().sendKeys(record.get("orderNote"));
 											 orderUrgentNote().sendKeys(record.get("urgentNote"));
 			//								 orderSalesRepId().sendKeys("Tom Leader");
-											 
+											 Thucydides.takeScreenshot();
 										    /******************Package Selection**************************/
 												 addPackage().click();
 												 waitFor(4).seconds();
@@ -434,6 +436,7 @@ public class SalesforceGlueAccountPage  extends PageObject {
 										    	 waitFor(5).seconds();
 										    	 nextMonth().click();
 												 waitFor(3).seconds();
+												 Thucydides.takeScreenshot();
 											 }
 											 if (packageType.equalsIgnoreCase("MailPlus")) {
 												 
