@@ -19,7 +19,7 @@ public class DefinitionSteps {
     @Steps
     EndUserSteps salesUser;
     
-    @Given("Sales rep is on the Salesfoce home page")
+    @Given("Sales rep is on the Salesforce home page")
     public void userIsOnTheSalesforceHomePage() {
         salesUser.is_this_home_page();
     }

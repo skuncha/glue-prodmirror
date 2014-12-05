@@ -463,13 +463,13 @@ public class SalesforceGlueAccountPage  extends PageObject {
 												 waitFor(6).seconds();
 												 nextMonth().click();
 												 waitFor(3).seconds();
-												 element.findElement(By.xpath("//tbody/tr[6]/td[4]")).click();
+												 element.findElement(By.xpath("//tbody/tr[5]/td[4]")).click();
 												 waitFor(6).seconds();
 											 }
 											 if (packageType.equalsIgnoreCase("Mail Display Non-Print")) {
 												 
 											 }
-											 element.findElement(By.xpath("//tbody/tr[5]/td[4]")).click(); /**************** Date Field*****************/
+											 element.findElement(By.xpath("//tbody/tr[5]/td[5]")).click(); /**************** Date Field*****************/
 									    	 	waitFor(5).seconds();
 									    	 Thucydides.takeScreenshot();
 									    	 /*saveOrder().click(); 
@@ -535,8 +535,6 @@ public class SalesforceGlueAccountPage  extends PageObject {
 							    	 				    		synctimeforSOPID =10;
 							    	 				    	}
 			/**********************************************************************************************/	
-			
-						 
 			} catch (Exception e1) 
 				{
 					e1.getMessage();

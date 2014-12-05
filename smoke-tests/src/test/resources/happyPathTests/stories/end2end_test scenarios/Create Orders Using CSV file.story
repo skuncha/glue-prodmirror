@@ -12,7 +12,7 @@ Meta:
 @author Srinivasa Kuncha
 @tags feature: User Login
 
-Given Sales rep is on the Salesfoce home page
+Given Sales rep is on the Salesforce home page
 When Sales rep login to glue as Mail user by supplying [username] and [password]
 Then Mail user should be able to login to glue successfully
 When Mail user navigate to Accounts page and click on New button
